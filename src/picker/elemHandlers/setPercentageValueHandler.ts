@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js-light'
 import {BottomButtonText, Store} from '../utils/types.ts'
 import {unknownToPositiveNumber} from '../utils/utils.ts'
 import {ValueHelper} from '../valueHelper.ts'
@@ -49,6 +50,6 @@ export function createInputValueHandler(store: Store, valueHelper: ValueHelper) 
 		}
 
 		const numberValue = unknownToPositiveNumber(inputValue)
-		store.value = valueHelper.normalizeValue(numberValue)
+		store.value = valueHelper.normalizeValue(new Decimal(numberValue))
 	}
 }

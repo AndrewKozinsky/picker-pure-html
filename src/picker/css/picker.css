@@ -10,6 +10,14 @@
 .picker__currency-input {
     field-sizing: content;
 }
+.picker__currency-input::-webkit-outer-spin-button,
+.picker__currency-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.picker__currency-input[type=number] {
+    -moz-appearance: textfield;
+}
 
 .picker__currency-input::placeholder {
     opacity: 0.3;

@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js-light'
 
 export type PickerUnsafeConfig = {
 	minValue: unknown
@@ -8,18 +9,18 @@ export type PickerUnsafeConfig = {
 }
 
 export type PickerConfig = {
-	minValue: number
-	maxValue: number
-	step: number
-	initialValue: number
+	minValue: Decimal
+	maxValue: Decimal
+	step: Decimal
+	initialValue: Decimal
 	currency: string
 }
 
 export type Store = {
-	minValue: number
-	maxValue: number
-	step: number
-	value: number
+	minValue: Decimal
+	maxValue: Decimal
+	step: Decimal
+	value: Decimal
 	currency: string
 }
 

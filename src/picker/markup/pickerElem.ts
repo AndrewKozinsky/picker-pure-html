@@ -13,7 +13,7 @@ export function create$PickerElem() {
                   class="picker__currency-input"
                   placeholder="0.00"
           />
-          <span class="picker__currency-name">USDT</span>
+          <span class="picker__currency-name"></span>
         </label>
       </div>
       <div class="picker__middle-divider"></div>

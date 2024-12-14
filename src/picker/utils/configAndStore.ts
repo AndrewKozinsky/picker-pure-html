@@ -1,6 +1,39 @@
+import Decimal from 'decimal.js-light'
 import {ValueHelper} from '../valueHelper.ts'
 import {PickerConfig, PickerElements, PickerUnsafeConfig, Store} from './types.ts'
 import {unknownToPositiveNumber, unknownToString} from './utils.ts'
+
+export function fixPickerConfig(pickerUnsafeConfig: PickerUnsafeConfig): PickerConfig {
+	const step = unknownToPositiveNumber(pickerUnsafeConfig.step, 1)
+	const decStep = new Decimal(step)
+
+	let minValue = unknownToPositiveNumber(pickerUnsafeConfig.minValue)
+	let decMinValue = new Decimal(minValue)
+	decMinValue = ValueHelper.roundNumberToStep(decMinValue, decStep, 'ceil')
+
+	let maxValue = unknownToPositiveNumber(pickerUnsafeConfig.maxValue)
+	let decMaxValue = new Decimal(maxValue)
+	decMaxValue = ValueHelper.roundNumberToStep(decMaxValue, decStep, 'floor')
+
+	let initialValue = unknownToPositiveNumber(pickerUnsafeConfig.initialValue)
+	let decInitialValue = new Decimal(initialValue)
+	decInitialValue = ValueHelper.roundNumberToStep(decInitialValue, decStep)
+	if (decInitialValue.lt(decMinValue)) {
+		decInitialValue = decMinValue
+	} else if (decInitialValue.gt(decMaxValue)) {
+		decInitialValue = decMaxValue
+	}
+
+	const currency = unknownToString(pickerUnsafeConfig.currency).toLocaleUpperCase()
+
+	return {
+		minValue: decMinValue,
+		maxValue: decMaxValue,
+		step: decStep,
+		initialValue: decInitialValue,
+		currency
+	}
+}
 
 export function createPickerStore(pickerConfig: PickerConfig, pickerElems: PickerElements, valueHelper: ValueHelper): Store {
 	const storeObj: Store = {
@@ -34,29 +67,4 @@ export function createPickerStore(pickerConfig: PickerConfig, pickerElems: Picke
 			}
 		}
 	})
-}
-
-export function fixPickerConfig(pickerUnsafeConfig: PickerUnsafeConfig): PickerConfig {
-	const step = unknownToPositiveNumber(pickerUnsafeConfig.step, 1)
-
-	let minValue = unknownToPositiveNumber(pickerUnsafeConfig.minValue)
-	minValue = ValueHelper.roundNumberToStep(minValue, step, 'ceil')
-
-	let maxValue = unknownToPositiveNumber(pickerUnsafeConfig.maxValue)
-	maxValue = ValueHelper.roundNumberToStep(maxValue, step, 'floor')
-
-	let initialValue = unknownToPositiveNumber(pickerUnsafeConfig.initialValue)
-	if (initialValue < minValue) {
-		initialValue = minValue
-	}
-
-	const currency = unknownToString(pickerUnsafeConfig.currency).toLocaleUpperCase()
-
-	return {
-		minValue,
-		maxValue,
-		step,
-		initialValue,
-		currency
-	}
 }

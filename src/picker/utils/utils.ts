@@ -28,4 +28,3 @@ export function unknownToString(value: unknown, defaultValue: unknown = ''): str
 
 	return ''
 }
-

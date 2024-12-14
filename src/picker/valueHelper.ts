@@ -1,8 +1,10 @@
+import Decimal from 'decimal.js-light'
+
 type RoundNumberToStepDirection = 'floor' | 'ceil' | 'auto'
 
 export class ValueHelper {
 	constructor(
-		private minValue: number, private maxValue: number, private step: number
+		private minValue: Decimal, private maxValue: Decimal, private step: Decimal
 	) {}
 
 	get25Percent() {
@@ -19,25 +21,26 @@ export class ValueHelper {
 	}
 
 	getValuePercent(percentage: number) {
-		const newUnsafeValue = (this.maxValue - this.minValue) * percentage + this.minValue
+		// (this.maxValue - this.minValue) * percentage + this.minValue
+		const newUnsafeValue = this.maxValue.minus(this.minValue).mul(percentage).plus(this.minValue)
 
 		return this.normalizeValue(newUnsafeValue)
 	}
 
-	increaseValueStep(value: number): number {
-		const newValue = value + this.step
+	increaseValueStep(value: Decimal): Decimal {
+		const newValue = value.plus(this.step)
 		return this.normalizeValue(newValue)
 	}
 
-	decreaseValueStep(value: number): number {
-		const newValue = value - this.step
+	decreaseValueStep(value: Decimal): Decimal {
+		const newValue = value.minus(this.step)
 		return this.normalizeValue(newValue)
 	}
 
-	normalizeValue(unsafeValue: number): number {
-		if (unsafeValue < this.minValue) {
+	normalizeValue(unsafeValue: Decimal): Decimal {
+		if (unsafeValue.lt(this.minValue)) {
 			return this.minValue
-		} else if (unsafeValue > this.maxValue) {
+		} else if (unsafeValue.gt(this.maxValue)) {
 			return this.maxValue
 		}
 
@@ -51,22 +54,23 @@ export class ValueHelper {
 	 * @param step — значение шага
 	 * @param direction — в какую сторону округлять значение
 	 */
-	static roundNumberToStep(unsafeNum: number, step: number, direction: RoundNumberToStepDirection = 'auto'): number {
+	static roundNumberToStep(unsafeNum: Decimal, step: Decimal, direction: RoundNumberToStepDirection = 'auto'): Decimal {
 		// Если делится без остатка, то минимальное число кратно шагу
-		if (unsafeNum % step === 0) {
+		// Аналог unsafeNum % step === 0
+		if (unsafeNum.dividedBy(step).isint()) {
 			return unsafeNum
 		}
 
-		// В противном случае получу более число кратное шагу
+		// В противном случае получу число кратное шагу.
 		// Округление в большую или меньшую сторону в зависимости от направления
-		const stepMultipliers: Record<RoundNumberToStepDirection, number> = {
-			auto: Math.round(unsafeNum / step), // Math.round(12 / 5) => 2
-			floor: Math.floor(unsafeNum / step), // Math.floor(12 / 5) => 2
-			ceil: Math.ceil(unsafeNum / step), // Math.ceil(12 / 5) => 3
+		const stepMultipliers: Record<RoundNumberToStepDirection, Decimal> = {
+			auto: unsafeNum.div(step).toInteger(), // Аналог Math.round(12 / 5) => 2
+			floor: unsafeNum.div(step).toInteger().minus(1), // Аналог Math.floor(12 / 5) => 2
+			ceil: unsafeNum.div(step).toInteger(), // Аналог Math.ceil(12 / 5) => 3
 		}
 
 		// Увеличу шаг на полученный множитель
 		// 3 * 5 => 15
-		return stepMultipliers[direction] * unsafeNum
+		return stepMultipliers[direction].mul(step)
 	}
 }
