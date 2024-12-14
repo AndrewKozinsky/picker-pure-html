@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js-light'
 import {BottomButtonText, Store} from '../utils/types.ts'
 import {unknownToPositiveNumber} from '../utils/utils.ts'
-import {ValueHelper} from '../valueHelper.ts'
+import {ValueHelper} from '../utils/valueHelper.ts'
 
 export function createSetPercentageValueHandler(store: Store, percentage: BottomButtonText, valueHelper: ValueHelper) {
 	return () => {

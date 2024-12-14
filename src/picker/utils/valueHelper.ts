@@ -21,7 +21,7 @@ export class ValueHelper {
 	}
 
 	getValuePercent(percentage: number) {
-		// (this.maxValue - this.minValue) * percentage + this.minValue
+		// (maxValue minValue) * percentage + minValue
 		const newUnsafeValue = this.maxValue.minus(this.minValue).mul(percentage).plus(this.minValue)
 
 		return this.normalizeValue(newUnsafeValue)
@@ -64,9 +64,9 @@ export class ValueHelper {
 		// В противном случае получу число кратное шагу.
 		// Округление в большую или меньшую сторону в зависимости от направления
 		const stepMultipliers: Record<RoundNumberToStepDirection, Decimal> = {
+			floor: unsafeNum.div(step).toInteger(), // Аналог Math.floor(12 / 5) => 2
 			auto: unsafeNum.div(step).toInteger(), // Аналог Math.round(12 / 5) => 2
-			floor: unsafeNum.div(step).toInteger().minus(1), // Аналог Math.floor(12 / 5) => 2
-			ceil: unsafeNum.div(step).toInteger(), // Аналог Math.ceil(12 / 5) => 3
+			ceil: unsafeNum.div(step).toInteger().plus(1), // Аналог Math.ceil(12 / 5) => 3
 		}
 
 		// Увеличу шаг на полученный множитель

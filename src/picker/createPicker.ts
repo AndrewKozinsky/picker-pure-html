@@ -4,7 +4,7 @@ import {
 import {createPickerStore, fixPickerConfig} from './utils/configAndStore.ts'
 import {create$PickerElem, getPicker$Elems} from './markup/pickerElem.ts'
 import {BottomButtonText, PickerUnsafeConfig} from './utils/types.ts'
-import {ValueHelper} from './valueHelper.ts'
+import {ValueHelper} from './utils/valueHelper.ts'
 
 export function createPicker($pickerContainer: HTMLElement, pickerUnsafeConfig: PickerUnsafeConfig) {
 	let $picker = $pickerContainer.querySelector('.picker') as HTMLElement

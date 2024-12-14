@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js-light'
-import {ValueHelper} from '../valueHelper.ts'
+import {ValueHelper} from './valueHelper.ts'
 import {PickerConfig, PickerElements, PickerUnsafeConfig, Store} from './types.ts'
 import {unknownToPositiveNumber, unknownToString} from './utils.ts'
 
