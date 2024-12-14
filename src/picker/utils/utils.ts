@@ -1,13 +1,19 @@
+export function unknownToPositiveNumber(value: unknown, defaultValue: unknown = 0): number {
+	const number = unknownToNumber(value, defaultValue)
+	return number < 0 ? 0 : number
+}
 
 export function unknownToNumber(value: unknown, defaultValue: unknown = 0): number {
 	if (typeof value === 'number') {
 		if (!isNaN(value)) return value
+	}
 
-		if (typeof defaultValue === 'number') {
-			return isNaN(defaultValue) ? 0 : defaultValue
-		}
-	} else if (typeof value === 'string') {
+	if (typeof value === 'string') {
 		if (!isNaN(+value)) return +value
+	}
+
+	if (typeof defaultValue === 'number') {
+		return isNaN(defaultValue) ? 0 : defaultValue
 	}
 
 	return 0

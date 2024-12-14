@@ -1,5 +1,5 @@
 import {BottomButtonText, Store} from '../utils/types.ts'
-import {unknownToNumber} from '../utils/utils.ts'
+import {unknownToPositiveNumber} from '../utils/utils.ts'
 import {ValueHelper} from '../valueHelper.ts'
 
 export function createSetPercentageValueHandler(store: Store, percentage: BottomButtonText, valueHelper: ValueHelper) {
@@ -48,7 +48,7 @@ export function createInputValueHandler(store: Store, valueHelper: ValueHelper) 
 			return
 		}
 
-		const numberValue = unknownToNumber(inputValue)
+		const numberValue = unknownToPositiveNumber(inputValue)
 		store.value = valueHelper.normalizeValue(numberValue)
 	}
 }

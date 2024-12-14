@@ -1,6 +1,6 @@
 import {ValueHelper} from '../valueHelper.ts'
 import {PickerConfig, PickerElements, PickerUnsafeConfig, Store} from './types.ts'
-import {unknownToNumber, unknownToString} from './utils.ts'
+import {unknownToPositiveNumber, unknownToString} from './utils.ts'
 
 export function createPickerStore(pickerConfig: PickerConfig, pickerElems: PickerElements, valueHelper: ValueHelper): Store {
 	const storeObj: Store = {
@@ -37,17 +37,20 @@ export function createPickerStore(pickerConfig: PickerConfig, pickerElems: Picke
 }
 
 export function fixPickerConfig(pickerUnsafeConfig: PickerUnsafeConfig): PickerConfig {
-	const step = unknownToNumber(pickerUnsafeConfig.step, 1)
+	const step = unknownToPositiveNumber(pickerUnsafeConfig.step, 1)
 
-	let minValue = unknownToNumber(pickerUnsafeConfig.minValue)
-	minValue = ValueHelper.roundNumberToStep(minValue, step)
+	let minValue = unknownToPositiveNumber(pickerUnsafeConfig.minValue)
+	minValue = ValueHelper.roundNumberToStep(minValue, step, 'ceil')
 
-	let maxValue = unknownToNumber(pickerUnsafeConfig.maxValue)
-	maxValue = ValueHelper.roundNumberToStep(maxValue, step)
+	let maxValue = unknownToPositiveNumber(pickerUnsafeConfig.maxValue)
+	maxValue = ValueHelper.roundNumberToStep(maxValue, step, 'floor')
 
-	const initialValue = unknownToNumber(pickerUnsafeConfig.initialValue)
+	let initialValue = unknownToPositiveNumber(pickerUnsafeConfig.initialValue)
+	if (initialValue < minValue) {
+		initialValue = minValue
+	}
+
 	const currency = unknownToString(pickerUnsafeConfig.currency).toLocaleUpperCase()
-
 
 	return {
 		minValue,

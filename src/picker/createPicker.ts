@@ -8,10 +8,10 @@ import {ValueHelper} from './valueHelper.ts'
 
 export function createPicker($pickerContainer: HTMLElement, pickerUnsafeConfig: PickerUnsafeConfig) {
 	let $picker = $pickerContainer.querySelector('.picker') as HTMLElement
-	const $pickerAlreadyExists = !!$picker
 
 	if (!$picker) {
 		$picker = create$PickerElem()
+		$pickerContainer.appendChild($picker)
 	}
 
 	const picker$Elems = getPicker$Elems($picker)
@@ -31,11 +31,4 @@ export function createPicker($pickerContainer: HTMLElement, pickerUnsafeConfig: 
 
 	picker$Elems.$currencyInput.onkeydown = createArrowsKeyDownValueHandler(store, valueHelper)
 	picker$Elems.$currencyInput.oninput = createInputValueHandler(store, valueHelper)
-
-	if (!$pickerAlreadyExists) {
-		$pickerContainer.appendChild($picker)
-	}
 }
-
-
-
