@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js-light'
+import {adjustProgressLine} from '../elemHandlers/adjustProgressLine.ts'
 import {ValueHelper} from './valueHelper.ts'
 import {PickerConfig, PickerElements, PickerUnsafeConfig, Store} from './types.ts'
 import {unknownToPositiveNumber, unknownToString} from './utils.ts'
@@ -44,6 +45,8 @@ export function createPickerStore(pickerConfig: PickerConfig, pickerElems: Picke
 		currency: pickerConfig.currency,
 	}
 
+	let oldPercentValue = getPercentFromNum(pickerConfig, pickerConfig.initialValue)
+
 	return new Proxy(storeObj, {
 		set(target, prop, val) { // для перехвата записи свойства
 			if (prop == 'value') {
@@ -51,6 +54,17 @@ export function createPickerStore(pickerConfig: PickerConfig, pickerElems: Picke
 				target[prop] = normalizedValue
 
 				pickerElems.$currencyInput.value = normalizedValue.toString()
+
+				const percentValue = getPercentFromNum(pickerConfig, normalizedValue)
+
+				adjustProgressLine({
+					$segmentsArr: pickerElems.buttonLines,
+					currentPercent: +oldPercentValue.toString(),
+					newPercent: +(percentValue).toString(),
+					totalTimeInMs: 200
+				})
+
+				oldPercentValue = percentValue
 			} else {
 				// @ts-ignore
 				target[prop] = val
@@ -67,4 +81,12 @@ export function createPickerStore(pickerConfig: PickerConfig, pickerElems: Picke
 			}
 		}
 	})
+}
+
+
+export function getPercentFromNum(pickerConfig: PickerConfig, current: Decimal): Decimal {
+	const total = pickerConfig.maxValue.minus(pickerConfig.minValue)
+	const cur = current.minus(pickerConfig.minValue)
+
+	return cur.dividedBy(total).mul(100)
 }

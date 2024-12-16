@@ -1,6 +1,6 @@
 import {expect, it} from 'vitest'
 import { fireEvent } from '@testing-library/dom'
-import {createPicker} from '../createPicker.ts'
+import {createPicker} from '../src/picker/createPicker.ts'
 import {get$picker, get$pickerContainer, getPicker$Elems, wait} from './testUtils.ts'
 
 const $pickerContainer = get$pickerContainer()

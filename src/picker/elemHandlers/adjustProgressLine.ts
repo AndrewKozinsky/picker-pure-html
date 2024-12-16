@@ -239,3 +239,38 @@ function animateWidth({ element, duration, startWidth, endWidth }: AnimationOpti
 
 	requestAnimationFrame(step)
 }
+
+
+type InitProgressLineConfig = {
+	// Элементы полоски, которым нужно задать ширину
+	$segmentsArr: HTMLElement[],
+	// Текущее процентное значение полоски
+	percentsValue: number
+}
+
+// ===================================
+
+export function setProgressLinesWidth(config: InitProgressLineConfig) {
+	// 4   36.734693877551024
+	const { $segmentsArr, percentsValue } = config
+
+	// Общее количество полосок для анимации
+	const segmentsTotalNum = $segmentsArr.length // 4
+	// Сколько процентов приходится на один сегмент
+	const percentsInSegment = 100 / segmentsTotalNum // 25
+
+	const segmentNum = Math.ceil(percentsValue / percentsInSegment) // 2
+	const startSegmentPercents = percentsValue - (percentsInSegment * (segmentNum - 1))
+
+	for (let i = 1; i <= segmentsTotalNum; i++) {
+		const $currentSegment = $segmentsArr[i - 1]
+
+		if (i < segmentNum) {
+			$currentSegment.style.width = '100%'
+		} else if (i === segmentNum) {
+			$currentSegment.style.width = startSegmentPercents + '%'
+		} else {
+			$currentSegment.style.width = '0'
+		}
+	}
+}

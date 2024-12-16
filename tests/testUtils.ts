@@ -2,7 +2,7 @@ import fs from 'fs'
 import {Window} from 'happy-dom'
 import path from 'path'
 import {vi} from 'vitest'
-import {PickerElements} from '../utils/types.ts'
+import {PickerElements} from '../src/picker/utils/types.ts'
 
 export function get$pickerContainer() {
 	const document = getMockerDocument()
@@ -34,6 +34,12 @@ export function getPicker$Elems($picker: HTMLElement): PickerElements {
 	const $button_75 = $bottomButtons[2] as HTMLButtonElement
 	const $button_100 = $bottomButtons[3] as HTMLButtonElement
 
+	const $buttonLines = $picker.querySelectorAll('.picker__bottom-btn-line')
+	const buttonLines: HTMLElement[] = []
+	for (let i = 0; i < $buttonLines.length; i++) {
+		buttonLines.push($buttonLines[i] as HTMLElement)
+	}
+
 	return {
 		$currencyInput,
 		$currencyName,
@@ -41,6 +47,7 @@ export function getPicker$Elems($picker: HTMLElement): PickerElements {
 		$button_50,
 		$button_75,
 		$button_100,
+		buttonLines,
 	}
 }
 
