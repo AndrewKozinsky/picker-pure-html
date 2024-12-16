@@ -38,4 +38,5 @@ export type PickerElements = {
 	$button_50: HTMLButtonElement
 	$button_75: HTMLButtonElement
 	$button_100: HTMLButtonElement
+	buttonLines: HTMLElement[]
 }

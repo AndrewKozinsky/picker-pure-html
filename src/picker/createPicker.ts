@@ -1,3 +1,4 @@
+import {adjustProgressLine} from './elemHandlers/adjustProgressLine.ts'
 import {
 	createSetPercentageValueHandler, createArrowsKeyDownValueHandler, createInputValueHandler
 } from './elemHandlers/setPercentageValueHandler.ts'
@@ -28,6 +29,13 @@ export function createPicker($pickerContainer: HTMLElement, pickerUnsafeConfig: 
 	picker$Elems.$button_50.onclick = createSetPercentageValueHandler(store, BottomButtonText._50, valueHelper)
 	picker$Elems.$button_75.onclick = createSetPercentageValueHandler(store, BottomButtonText._75, valueHelper)
 	picker$Elems.$button_100.onclick = createSetPercentageValueHandler(store, BottomButtonText._100, valueHelper)
+
+	adjustProgressLine({
+		$segmentsArr: picker$Elems.buttonLines,
+		currentPercent: 30,
+		newPercent: 55,
+		totalTimeInMs: 1000
+	})
 
 	picker$Elems.$currencyInput.onkeydown = createArrowsKeyDownValueHandler(store, valueHelper)
 	picker$Elems.$currencyInput.oninput = createInputValueHandler(store, valueHelper)
