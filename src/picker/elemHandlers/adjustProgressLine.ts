@@ -26,7 +26,7 @@ export function adjustProgressLine(config: AdjustProgressLineConfig) {
 
 	for (let i = 0; i < animationConfig.length; i++) {
 		const animConfig = animationConfig[i]
-		const $currentSegment = config.$segmentsArr[i]
+		const $currentSegment = config.$segmentsArr[animConfig.id - 1]
 
 		setTimeout(() => {
 			animateWidth({
@@ -65,6 +65,7 @@ function getStartAndEndSegmentsTotalPercents(config: {
 }
 
 type SegmentAnimationConfig = {
+	id: number
 	from: number
 	to: number
 	animationTime: number
@@ -92,54 +93,121 @@ function createAnimationConfig(
 
 	let delay = 0
 
-	for (let i = 1; i <= segmentsNum; i++) {
-		if (i < startSegmentNum) {
-			segmentsAnimationConfig.push({
-				from: 100,
-				to: 100,
-				animationTime: 0,
-				delay: 0
-			})
-		} else if (i === startSegmentNum) {
-			const animationTime = totalTimeInMs / 100 * ((100 / segmentsNum) - startSegmentPercents)
+	if (startSegmentNum <= endSegmentNum) {
+		for (let i = 1; i <= segmentsNum; i++) {
+			if (i < startSegmentNum) {
+				segmentsAnimationConfig.push({
+					id: i,
+					from: 100,
+					to: 100,
+					animationTime: 0,
+					delay: 0
+				})
+			} else if (i === startSegmentNum) {
+				const animationTime = totalTimeInMs / 100 * ((100 / segmentsNum) - startSegmentPercents)
 
-			segmentsAnimationConfig.push({
-				from: startSegmentPercents * segmentsNum,
-				to: startSegmentNum === endSegmentNum ? endSegmentPercents * segmentsNum : 100,
-				animationTime,
-				delay
-			})
+				segmentsAnimationConfig.push({
+					id: i,
+					from: startSegmentPercents * segmentsNum,
+					to: startSegmentNum === endSegmentNum ? endSegmentPercents * segmentsNum : 100,
+					animationTime,
+					delay
+				})
 
-			delay += animationTime
-		} else if (i > startSegmentNum && i < endSegmentNum) {
-			const animationTime = totalTimeInMs / segmentsNum
+				delay += animationTime
+			} else if (i > startSegmentNum && i < endSegmentNum) {
+				const animationTime = totalTimeInMs / segmentsNum
 
-			segmentsAnimationConfig.push({
-				from: 0,
-				to: 100,
-				animationTime,
-				delay
-			})
+				segmentsAnimationConfig.push({
+					id: i,
+					from: 0,
+					to: 100,
+					animationTime,
+					delay
+				})
 
-			delay += animationTime
-		} else if (i === endSegmentNum) {
-			const animationTime = (totalTimeInMs / 100) * endSegmentPercents
+				delay += animationTime
+			} else if (i === endSegmentNum) {
+				const animationTime = (totalTimeInMs / 100) * endSegmentPercents
 
-			segmentsAnimationConfig.push({
-				from: 0,
-				to: endSegmentPercents * segmentsNum,
-				animationTime,
-				delay
-			})
+				segmentsAnimationConfig.push({
+					id: i,
+					from: 0,
+					to: endSegmentPercents * segmentsNum,
+					animationTime,
+					delay
+				})
 
-			delay += animationTime
-		} else if (i > endSegmentNum) {
-			segmentsAnimationConfig.push({
-				from: 0,
-				to: 0,
-				animationTime: 0,
-				delay: 0
-			})
+				delay += animationTime
+			} else if (i > endSegmentNum) {
+				segmentsAnimationConfig.push({
+					id: i,
+					from: 0,
+					to: 0,
+					animationTime: 0,
+					delay: 0
+				})
+			}
+		}
+	} else {
+		for (let i = segmentsNum; i >= 1; i--) {
+			if (i > startSegmentNum) {
+				segmentsAnimationConfig.push({
+					id: i,
+					from: 0,
+					to: 0,
+					animationTime: 0,
+					delay: 0
+				})
+			}
+			else if (i === startSegmentNum) {
+				const animationTime = totalTimeInMs / 100 * startSegmentPercents
+
+				segmentsAnimationConfig.push({
+					id: i,
+					from: startSegmentPercents * segmentsNum,
+					to: startSegmentNum === endSegmentNum ? startSegmentPercents * segmentsNum : 0,
+					animationTime,
+					delay
+				})
+
+				delay += animationTime
+			}
+			else if (i < startSegmentNum && i > endSegmentNum) {
+				const animationTime = totalTimeInMs / segmentsNum
+
+				segmentsAnimationConfig.push({
+					id: i,
+					from: 100,
+					to: 0,
+					animationTime,
+					delay
+				})
+
+				delay += animationTime
+			}
+			else if (i === endSegmentNum) {
+				const animationTime = (totalTimeInMs / 100) * ((100 - endSegmentPercents) / 4)
+
+				segmentsAnimationConfig.push({
+					id: i,
+					from: 100,
+					to: endSegmentPercents * segmentsNum,
+					animationTime,
+					delay
+				})
+
+				delay += animationTime
+			}
+			else if (i < endSegmentNum) {
+				segmentsAnimationConfig.push({
+					id: i,
+					from: 100,
+					to: 100,
+					animationTime: 0,
+					delay: 0
+				})
+			}
 		}
 	}
 

@@ -32,8 +32,8 @@ export function createPicker($pickerContainer: HTMLElement, pickerUnsafeConfig: 
 
 	adjustProgressLine({
 		$segmentsArr: picker$Elems.buttonLines,
-		currentPercent: 30,
-		newPercent: 55,
+		currentPercent: 80,
+		newPercent: 5,
 		totalTimeInMs: 1000
 	})
 

@@ -23,15 +23,15 @@ export function create$PickerElem() {
 			<span class="picker__bottom-btn-text">${BottomButtonText._25}</span>
 		</button>
         <button class="picker__bottom-btn">
-			<div class="picker__bottom-btn-line" style="width: 20%;"></div>
+			<div class="picker__bottom-btn-line" style="width: 100%;"></div>
 			<span class="picker__bottom-btn-text">${BottomButtonText._50}</span>
 		</button>
         <button class="picker__bottom-btn">
-			<div class="picker__bottom-btn-line"></div>
+			<div class="picker__bottom-btn-line" style="width: 100%;"></div>
 			<span class="picker__bottom-btn-text">${BottomButtonText._75}</span>
 		</button>
         <button class="picker__bottom-btn">
-			<div class="picker__bottom-btn-line"></div>
+			<div class="picker__bottom-btn-line"  style="width: 20%;"></div>
 			<span class="picker__bottom-btn-text">${BottomButtonText._100}</span>
 		</button>
       </div>
